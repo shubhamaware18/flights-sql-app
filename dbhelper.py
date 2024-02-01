@@ -62,6 +62,52 @@ class DB:
         #     self.mycursor.close()
         #     self.conn.close()
 
+    # creating new method for fetching all Flights
+    def fetch_all_flights(self, source, destination):
+        """
+        This function is responsible for fetching flights based on source and destination.
+        """
+        try:
+            # Using parameterized query to prevent SQL injection
+            query = """
+                SELECT Airline, Route, Dep_time, Duration, Price
+                FROM flights.flight
+                WHERE Source = %s AND Destination = %s
+            """
+            self.mycursor.execute(query, (source, destination))
+
+            data = self.mycursor.fetchall()
+            return data
+        except mysql.connector.Error as query_error:
+            # Handle specific query-related errors
+            print(f"Query Execution Error: {query_error}")
+            raise QueryExecutionError("Error executing SQL query.")
+
+
+    # method for data visualization
+    def fetch_airline_frequency(self):
+        
+        """
+        This method fetch  the flights and its frequency
+        """
+        # creating empty lists for results(airline anme and frequency)
+        airline = []
+        frequency = []
+        
+        # SQL Query to fetch results
+        self.mycursor.execute("""
+            SELECT Airline, COUNT(*) FROM flights.flight
+                        GROUP BY Airline
+                                """)
+        data = self.mycursor.fetchall()
+
+        for item in data:
+            # appending results to respective lists
+            airline.append(item[0])
+            frequency.append(item[1])
+        
+        return airline, frequency
+    
 # Custom exception for database connection errors
 class DatabaseConnectionError(Exception):
     pass

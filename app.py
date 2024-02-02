@@ -56,5 +56,46 @@ elif user_option == 'Analytics':
     st.header('Pie Chart')
     st.plotly_chart(fig)
 
+    ####### code for Bar Plot ########
+    city, frequency1 = db.busy_airport()
+
+    # Plotting Graph
+    fig = go.Figure(go.Bar(
+        x=city,  # Use x instead of labels
+        y=frequency1,  # Use y instead of values
+        hoverinfo='x+y',  # Adjust hoverinfo
+        text=frequency1,  # Adjust textinfo
+    ))
+
+    st.header('Bar Chart')
+    st.plotly_chart(fig)
+
+
+    ####### code for Bar Plot ########
+    date, frequency2 = db.daily_frequency()
+
+    # Plotting Graph
+    fig = go.Figure(go.Line(
+        x=date,  # Use x instead of labels
+        y=frequency2,  # Use y instead of values
+        hoverinfo='x+y',  # Adjust hoverinfo
+        text=frequency2,  # Adjust textinfo
+    ))
+
+    st.header('Bar Chart')
+    st.plotly_chart(fig)
+
 else:
     st.title('About the Project')
+    st.write("""
+    **Flight Analytics Project:**
+
+    This project focuses on analyzing flight data, providing insights through visualizations.
+
+    - [LinkedIn](https://www.linkedin.com/in/shubham-aware/)
+    - [Medium](https://medium.com/@shubham1804)
+    - [GitHub](https://github.com/shubhamaware18)
+    """)
+
+# This variable ensures that the summary is displayed only once
+project_summary_shown = True

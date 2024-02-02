@@ -84,7 +84,7 @@ class DB:
             raise QueryExecutionError("Error executing SQL query.")
 
 
-    # method for data visualization
+    # method for data visualization of Pie chart
     def fetch_airline_frequency(self):
         
         """
@@ -107,6 +107,49 @@ class DB:
             frequency.append(item[1])
         
         return airline, frequency
+    
+
+    # method for data visualization of Bar Plot
+    def busy_airport(self):
+        # creating empty lists for results(City anme and frequency)
+        city = []
+        frequency = []
+
+        self.mycursor.execute("""
+            SELECT Source, COUNT(*) FROM (SELECT Source FROM flights.flight
+                              UNION ALL
+                              SELECT Destination FROM  flights.flight) t
+            GROUP BY t.Source
+            ORDER BY COUNT(*) DESC""")
+        
+        data = self.mycursor.fetchall()
+
+        for item in data:
+            # appending results to respective lists
+            city.append(item[0])
+            frequency.append(item[1])
+
+        return city, frequency
+    
+
+    # method for data visualization of Line chart
+    def daily_frequency(self):
+        # creating empty lists for results(date anme and frequency)
+        date = []
+        frequency = []
+
+        self.mycursor.execute("""
+            SELECT Date_of_Journey, COUNT(*) FROM flights.flight
+                        GROUP BY Date_of_Journey
+                                """)
+
+        data = self.mycursor.fetchall()
+
+        for item in data:
+            date.append(item[0])
+            frequency.append(item[1])
+
+        return date, frequency
     
 # Custom exception for database connection errors
 class DatabaseConnectionError(Exception):
